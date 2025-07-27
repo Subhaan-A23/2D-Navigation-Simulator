@@ -1,12 +1,12 @@
 import path_planning_base
 import goal
 import robot
-
+import obstacles
 class DFS(path_planning_base.PathPlanning):
     def __init__(self, robot: robot.Robot, goal: goal.Goal, block_size, grid_size):
         super().__init__(robot, goal, block_size, grid_size)
 
-    def plan_path(self):
+    def plan_path(self, list_of_obstacles):
         start = (self.robot.x // self.blocksize, self.robot.y // self.blocksize)
         goal = (self.goal.x // self.blocksize, self.goal.y // self.blocksize)
         came_from = {}
@@ -19,7 +19,7 @@ class DFS(path_planning_base.PathPlanning):
             if current == goal:
                 break
 
-            for neighbor in self.getNeighbors(current):  # find all neighbors of current point
+            for neighbor in self.getNeighbors(current, self.goal.getPosition(), list_of_obstacles):  # find all neighbors of current point
                 if neighbor not in visited and neighbor not in open_list:
                     visited.add(neighbor)
                     came_from[neighbor] = current

@@ -17,7 +17,7 @@ import obstacles
 
 #initialise window size and block size
 WINDOW_SIZE = (800, 800)
-grid_size = 10
+grid_size = 20
 block_size = int(WINDOW_SIZE[0] / grid_size)
 
 #specify controller speed (how quickly the robot moves)
@@ -34,7 +34,7 @@ move_step = block_size
 # make a goal and a robot
 goal_point = goal.Goal(block_size, grid_size)
 driver = robot.Robot(block_size, grid_size)
-obstacles_list = obstacles.Obstacles(block_size, grid_size, 10)
+obstacles_list = obstacles.Obstacles(block_size, grid_size, 30)
 obstacles_list.compute_obstacle_positions(driver.getPosition, goal_point.getPosition)
 
 
@@ -44,7 +44,7 @@ driver.makeRandomPosition()
 
 # then compute the path plan using dfs
 DFS = DFS_path_planning.DFS(driver, goal_point, block_size, grid_size)
-DFS.plan_path()
+DFS.plan_path(obstacles_list.list_of_obstacles)
 
 path = DFS.path
 robot_controller = controller.controller(driver, DFS)
@@ -54,7 +54,6 @@ robot_controller.moveRobot(screen, utility.grid_colour, block_size, goal_point, 
 running = True
 while running:
     #draw screen 
-    print("Obstacles positions:", obstacles_list.list_of_obstacles)
     screen.fill(utility.background_colour)
     #then draw grid, robot and goal
     utility.drawScene(screen, utility.grid_colour, block_size, driver, goal_point, WINDOW_SIZE)
@@ -72,7 +71,7 @@ while running:
         goal_point.makeRandomPosition()
         obstacles_list.compute_obstacle_positions(driver.getPosition(), goal_point.getPosition())
         DFS = DFS_path_planning.DFS(driver, goal_point, block_size, grid_size)
-        DFS.plan_path()
+        DFS.plan_path(obstacles_list.list_of_obstacles)
         robot_controller = controller.controller(driver, DFS)
         robot_controller.compute_control_values()
         robot_controller.moveRobot(screen, utility.grid_colour, block_size, goal_point, WINDOW_SIZE, obstacles_list.list_of_obstacles)

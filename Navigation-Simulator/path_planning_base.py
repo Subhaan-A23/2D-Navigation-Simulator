@@ -1,4 +1,3 @@
-import math
 import pygame as pg
 import robot 
 import goal
@@ -12,7 +11,7 @@ class PathPlanning:
         self.path = []
         self.grid_size = grid_size
 
-    def getNeighbors(self, robot_position, list_of_obstacles=[]):
+    def getNeighbors(self, robot_position, goal_position, list_of_obstacles):
 
         x = robot_position[0]
         y = robot_position[1]
@@ -25,19 +24,18 @@ class PathPlanning:
 
         valid_neighbors = []
         
-        grid_obstacles = [(ox // self.block_size, oy // self.block_size) for ox, oy in list_of_obstacles]
+        grid_obstacles = [(ox // self.blocksize, oy // self.blocksize) for ox, oy in list_of_obstacles]
 
         for nx, ny in potential_neighbors:
-            if nx > limit_x[1] or nx < limit_x[0]:
+            if (
+                nx > limit_x[1] or nx < limit_x[0] or
+                ny > limit_y[1] or ny < limit_y[0] or
+                (nx, ny) in grid_obstacles or
+                (nx, ny) == goal_position
+            ):
                 continue
-            if ny > limit_y[1] or ny < limit_y[0]:
-                continue
-            if (nx, ny) in grid_obstacles:
-                continue
-            else:
-                valid_neighbors.append((nx, ny))
+            valid_neighbors.append((nx, ny))
             
-
         return valid_neighbors
         
     def plan_path(self):
