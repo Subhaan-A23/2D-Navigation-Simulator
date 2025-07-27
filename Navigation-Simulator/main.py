@@ -70,7 +70,7 @@ while running:
         print("goal hit")
         driver.makeRandomPosition()
         goal_point.makeRandomPosition()
-        obstacles_list.compute_obstacle_positions(driver.getPosition, goal_point.getPosition)
+        obstacles_list.compute_obstacle_positions(driver.getPosition(), goal_point.getPosition())
         DFS = DFS_path_planning.DFS(driver, goal_point, block_size, grid_size)
         DFS.plan_path()
         robot_controller = controller.controller(driver, DFS)
