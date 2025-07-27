@@ -11,7 +11,7 @@ class PathPlanning:
         self.path = []
         self.grid_size = grid_size
 
-    def getNeighbors(self, robot_position, goal_position, list_of_obstacles):
+    def getNeighbors(self, robot_position, list_of_obstacles):
 
         x = robot_position[0]
         y = robot_position[1]
@@ -30,8 +30,7 @@ class PathPlanning:
             if (
                 nx > limit_x[1] or nx < limit_x[0] or
                 ny > limit_y[1] or ny < limit_y[0] or
-                (nx, ny) in grid_obstacles or
-                (nx, ny) == goal_position
+                (nx, ny) in grid_obstacles
             ):
                 continue
             valid_neighbors.append((nx, ny))

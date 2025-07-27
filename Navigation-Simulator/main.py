@@ -5,8 +5,8 @@ import math
 import utility
 import robot
 import goal
-import path_planning_base
 import DFS_path_planning
+import BFS_path_planning
 import controller
 import obstacles
 
@@ -42,12 +42,17 @@ obstacles_list.compute_obstacle_positions(driver.getPosition, goal_point.getPosi
 goal_point.makeRandomPosition()
 driver.makeRandomPosition()
 
-# then compute the path plan using dfs
-DFS = DFS_path_planning.DFS(driver, goal_point, block_size, grid_size)
-DFS.plan_path(obstacles_list.list_of_obstacles)
+g = goal_point.getPosition()
+d = driver.getPosition()
 
-path = DFS.path
-robot_controller = controller.controller(driver, DFS)
+# then compute the path plan using dfs
+BFS = BFS_path_planning.BFS(driver, goal_point, block_size, grid_size)
+BFS.plan_path(obstacles_list.list_of_obstacles)
+
+path = BFS.path
+print(f"path is {path}")
+
+robot_controller = controller.controller(driver, BFS)
 robot_controller.compute_control_values()
 robot_controller.moveRobot(screen, utility.grid_colour, block_size, goal_point, WINDOW_SIZE, obstacles_list.list_of_obstacles)
 
@@ -70,9 +75,9 @@ while running:
         driver.makeRandomPosition()
         goal_point.makeRandomPosition()
         obstacles_list.compute_obstacle_positions(driver.getPosition(), goal_point.getPosition())
-        DFS = DFS_path_planning.DFS(driver, goal_point, block_size, grid_size)
-        DFS.plan_path(obstacles_list.list_of_obstacles)
-        robot_controller = controller.controller(driver, DFS)
+        BFS = BFS_path_planning.BFS(driver, goal_point, block_size, grid_size)
+        BFS.plan_path(obstacles_list.list_of_obstacles)
+        robot_controller = controller.controller(driver, BFS)
         robot_controller.compute_control_values()
         robot_controller.moveRobot(screen, utility.grid_colour, block_size, goal_point, WINDOW_SIZE, obstacles_list.list_of_obstacles)
 
